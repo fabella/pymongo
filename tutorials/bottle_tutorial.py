@@ -2,10 +2,11 @@ import bottle
 import pymongo
 
 # connect to mongoDB
-connection = pymongo.MongoClient('localhost', 27017)
+uri = "mongodb://admin:yKzDuTpSEKyzTwYiyvKi@ds033750.mongolab.com:33750/pymongo"
+connection = pymongo.MongoClient(uri)
 
 # attach to test database
-db = connection.test
+db = connection.pymongo
 
 # get handle for names collection
 fruits = db.fruits
@@ -13,7 +14,7 @@ fruits = db.fruits
 @bottle.route('/')
 def home_page():
     # find all the fruits in the database
-    my_things = fruits.find()
+    my_things = fruits.find().sort("name", pymongo.ASCENDING)
     my_fruits = []
     #iterate and get the name
     for thing in my_things:
