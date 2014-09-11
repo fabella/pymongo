@@ -20,4 +20,4 @@ def index():
     return '<b>Hello %s!</b>' % item['name']
 
 # run the webserver
-bottle.run(host='localhost', port=8080)
+bottle.run(host='localhost', port=8000)
