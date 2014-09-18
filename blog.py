@@ -181,7 +181,8 @@ def validate_signup(username, password, verify, email, errors):
     return True
 
 
-connection_string = "mongodb://localhost"
+#connection_string = "mongodb://localhost"
+connection_string = "mongodb://admin:yKzDuTpSEKyzTwYiyvKi@ds037990.mongolab.com:37990/blog"
 connection = pymongo.MongoClient(connection_string)
 database = connection.blog
 
