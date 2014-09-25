@@ -1,5 +1,4 @@
 import bottle
-import pymongo
 
 # this is the handler for the default path of the web server
 # added another comment

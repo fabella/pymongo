@@ -11,20 +11,23 @@ db = connection.pymongo
 # get handle for names collection
 fruits = db.fruits
 
+
 @bottle.route('/')
 def home_page():
     # find all the fruits in the database
     my_things = fruits.find().sort("name", pymongo.ASCENDING)
     my_fruits = []
-    #iterate and get the name
+    # iterate and get the name
     for thing in my_things:
         my_fruits.append(thing['name'])
     return bottle.template('hello_world', username='Fidel', things=my_fruits)
     # return bottle.template('hello_world', {'username':'Fidel', 'things':my_things})
 
+
 @bottle.route('/testpage')
 def test_page():
     return "this is a test page"
+
 
 @bottle.post('/favorite_fruit')
 def favorite_fruit():
@@ -35,6 +38,7 @@ def favorite_fruit():
         fruits.save({'name': fruit})
     bottle.response.set_cookie("fruit", fruit)
     bottle.redirect('/show_fruit')
+
 
 @bottle.route('/show_fruit')
 def show_fruit():

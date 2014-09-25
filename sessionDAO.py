@@ -8,7 +8,7 @@ __author__ = 'aje'
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#   http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,7 +25,6 @@ import string
 # The session Data Access Object handles interactions with the sessions collection
 
 class SessionDAO:
-
     def __init__(self, database):
         self.db = database
         self.sessions = database.sessions
@@ -38,7 +37,7 @@ class SessionDAO:
         session = {'username': username, '_id': session_id}
 
         try:
-            self.sessions.insert(session)
+            self.sessions.insert(session, safe=True)
         except:
             print "Unexpected error on start_session:", sys.exc_info()[0]
             return None

@@ -1,6 +1,8 @@
 import json
 import urllib2
+
 import pymongo
+
 
 # connect to mongo
 connection = pymongo.MongoClient("mongodb://localhost")
@@ -17,6 +19,6 @@ parsed = json.loads(reddit_page.read())
 print parsed
 # iterate through every news item on the page
 for item in parsed['data']['children']:
-#   # put it in mongo
-   stories.insert(item['data'])
+    # # put it in mongo
+    stories.insert(item['data'])
 
