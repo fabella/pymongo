@@ -1,6 +1,3 @@
-__author__ = 'aje'
-
-
 #
 # Copyright (c) 2008 - 2013 10gen, Inc. <http://10gen.com>
 #
@@ -17,6 +14,7 @@ __author__ = 'aje'
 # limitations under the License.
 #
 #
+
 import sys
 import random
 import string
@@ -36,6 +34,7 @@ class SessionDAO:
         session_id = self.get_random_str(32)
         session = {'username': username, '_id': session_id}
 
+        # noinspection PyBroadException
         try:
             self.sessions.insert(session, safe=True)
         except:
@@ -73,7 +72,8 @@ class SessionDAO:
         else:
             return session['username']
 
-    def get_random_str(self, num_chars):
+    @staticmethod
+    def get_random_str(num_chars):
         random_string = ""
         for i in range(num_chars):
             random_string = random_string + random.choice(string.ascii_letters)

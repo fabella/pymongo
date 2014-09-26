@@ -16,7 +16,6 @@
 #
 
 
-
 import pymongo
 import blogPostDAO
 import sessionDAO
@@ -24,9 +23,6 @@ import userDAO
 import bottle
 import cgi
 import re
-
-
-__author__ = 'aje'
 
 
 # General Discussion on structure. This program implements a blog. This file is the best place to start to get

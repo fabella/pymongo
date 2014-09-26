@@ -14,12 +14,12 @@
 # limitations under the License.
 #
 #
+
 import random
 import string
 import hashlib
 
 import pymongo
-
 
 
 # The User Data Access Object handles all interactions with the User collection.
@@ -30,7 +30,8 @@ class UserDAO:
         self.SECRET = 'verysecret'
 
     # makes a little salt
-    def make_salt(self):
+    @staticmethod
+    def make_salt():
         salt = ""
         for i in range(5):
             salt = salt + random.choice(string.ascii_letters)
@@ -42,7 +43,7 @@ class UserDAO:
     # use sha256
 
     def make_pw_hash(self, pw, salt=None):
-        if salt == None:
+        if salt is None:
             salt = self.make_salt();
         return hashlib.sha256(pw + salt).hexdigest() + "," + salt
 
@@ -50,6 +51,7 @@ class UserDAO:
     def validate_login(self, username, password):
 
         user = None
+        # noinspection PyBroadException
         try:
             user = self.users.find_one({'_id': username})
         except:
@@ -67,7 +69,6 @@ class UserDAO:
 
         # Looks good
         return user
-
 
     # creates a new user in the users collection
     def add_user(self, username, password, email):
