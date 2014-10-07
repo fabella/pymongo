@@ -1,3 +1,6 @@
+__author__ = 'aje'
+
+
 #
 # Copyright (c) 2008 - 2013 10gen, Inc. <http://10gen.com>
 #
@@ -5,7 +8,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-# http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +17,6 @@
 # limitations under the License.
 #
 #
-
 import sys
 import random
 import string
@@ -23,6 +25,7 @@ import string
 # The session Data Access Object handles interactions with the sessions collection
 
 class SessionDAO:
+
     def __init__(self, database):
         self.db = database
         self.sessions = database.sessions
@@ -34,7 +37,6 @@ class SessionDAO:
         session_id = self.get_random_str(32)
         session = {'username': username, '_id': session_id}
 
-        # noinspection PyBroadException
         try:
             self.sessions.insert(session, safe=True)
         except:
@@ -72,8 +74,7 @@ class SessionDAO:
         else:
             return session['username']
 
-    @staticmethod
-    def get_random_str(num_chars):
+    def get_random_str(self, num_chars):
         random_string = ""
         for i in range(num_chars):
             random_string = random_string + random.choice(string.ascii_letters)

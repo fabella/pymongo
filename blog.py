@@ -1,3 +1,4 @@
+
 #
 # Copyright (c) 2008 - 2013 10gen, Inc. <http://10gen.com>
 #
@@ -5,7 +6,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-# http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,6 +17,7 @@
 #
 
 
+
 import pymongo
 import blogPostDAO
 import sessionDAO
@@ -23,6 +25,10 @@ import userDAO
 import bottle
 import cgi
 import re
+
+
+
+__author__ = 'aje'
 
 
 # General Discussion on structure. This program implements a blog. This file is the best place to start to get
@@ -36,6 +42,7 @@ import re
 # This route is the main page of the blog
 @bottle.route('/')
 def blog_index():
+
     cookie = bottle.request.get_cookie("session")
 
     username = sessions.get_username(cookie)
@@ -45,10 +52,25 @@ def blog_index():
 
     return bottle.template('blog_template', dict(myposts=l, username=username))
 
+# The main page of the blog, filtered by tag
+@bottle.route('/tag/<tag>')
+def posts_by_tag(tag="notfound"):
+
+    cookie = bottle.request.get_cookie("session")
+    tag = cgi.escape(tag)
+
+    username = sessions.get_username(cookie)
+
+    # even if there is no logged in user, we can show the blog
+    l = posts.get_posts_by_tag(tag, 10)
+
+    return bottle.template('blog_template', dict(myposts=l, username=username))
+
 
 # Displays a particular blog post
 @bottle.get("/post/<permalink>")
 def show_post(permalink="notfound"):
+
     cookie = bottle.request.get_cookie("session")
 
     username = sessions.get_username(cookie)
@@ -102,7 +124,6 @@ def post_new_comment():
 
         bottle.redirect("/post/" + permalink)
 
-
 @bottle.get("/post_not_found")
 def post_not_found():
     return "Sorry, post not found"
@@ -111,13 +132,13 @@ def post_not_found():
 # Displays the form allowing a user to add a new post. Only works for logged in users
 @bottle.get('/newpost')
 def get_newpost():
+
     cookie = bottle.request.get_cookie("session")
     username = sessions.get_username(cookie)  # see if user is logged in
     if username is None:
         bottle.redirect("/login")
 
-    return bottle.template("newpost_template", dict(subject="", body="", errors="", tags="", username=username))
-
+    return bottle.template("newpost_template", dict(subject="", body = "", errors="", tags="", username=username))
 
 #
 # Post handler for setting up a new post.
@@ -162,8 +183,7 @@ def present_signup():
                            dict(username="", password="",
                                 password_error="",
                                 email="", username_error="", email_error="",
-                                verify_error=""))
-
+                                verify_error =""))
 
 # displays the initial blog login form
 @bottle.get('/login')
@@ -172,10 +192,10 @@ def present_login():
                            dict(username="", password="",
                                 login_error=""))
 
-
 # handles a login request
 @bottle.post('/login')
 def process_login():
+
     username = bottle.request.forms.get("username")
     password = bottle.request.forms.get("password")
 
@@ -207,22 +227,25 @@ def process_login():
 @bottle.get('/internal_error')
 @bottle.view('error_template')
 def present_internal_error():
-    return {'error': "System has encountered a DB error"}
+    return {'error':"System has encountered a DB error"}
 
 
 @bottle.get('/logout')
 def process_logout():
+
     cookie = bottle.request.get_cookie("session")
 
     sessions.end_session(cookie)
 
     bottle.response.set_cookie("session", "")
 
+
     bottle.redirect("/signup")
 
 
 @bottle.post('/signup')
 def process_signup():
+
     email = bottle.request.forms.get("email")
     username = bottle.request.forms.get("username")
     password = bottle.request.forms.get("password")
@@ -246,6 +269,7 @@ def process_signup():
         return bottle.template("signup", errors)
 
 
+
 @bottle.get("/welcome")
 def present_welcome():
     # check for a cookie, if present, then extract value
@@ -259,13 +283,15 @@ def present_welcome():
     return bottle.template("welcome", {'username': username})
 
 
+
 # Helper Functions
 
 #extracts the tag from the tags form element. an experience python programmer could do this in  fewer lines, no doubt
 def extract_tags(tags):
+
     whitespace = re.compile('\s')
 
-    nowhite = whitespace.sub("", tags)
+    nowhite = whitespace.sub("",tags)
     tags_array = nowhite.split(',')
 
     # let's clean it up
@@ -305,8 +331,7 @@ def validate_signup(username, password, verify, email, errors):
             return False
     return True
 
-#connection_string = "mongodb://localhost"
-connection_string = "mongodb://admin:yKzDuTpSEKyzTwYiyvKi@ds037990.mongolab.com:37990/blog"
+connection_string = "mongodb://localhost"
 connection = pymongo.MongoClient(connection_string)
 database = connection.blog
 
@@ -314,6 +339,7 @@ posts = blogPostDAO.BlogPostDAO(database)
 users = userDAO.UserDAO(database)
 sessions = sessionDAO.SessionDAO(database)
 
+
 bottle.debug(True)
-bottle.run(host='0.0.0.0', port=8000)  # Start the webserver running and wait for requests
+bottle.run(host='localhost', port=8082)         # Start the webserver running and wait for requests
 

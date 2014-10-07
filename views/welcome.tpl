@@ -1,33 +1,28 @@
 <!DOCTYPE html>
 
 <html>
-<head>
+  <head>
     <title>Welcome</title>
     <style type="text/css">
-        .label {
-            text-align: right
-        }
-
-        .error {
-            color: red
-        }
+      .label {text-align: right}
+      .error {color: red}
     </style>
 
-</head>
+  </head>
 
-<body>
-Welcome {{username}}
+  <body>
+    Welcome {{username}}
 <p>
 <ul>
-    <li><a href="/">Goto Blog Home</a></li>
-    <li>
-        <a href="/logout">Logout</a>
-    </li>
-    <li>
-        <a href="/newpost">Create a New Post</a>
-    </li>
+<li><a href="/">Goto Blog Home</a></li>
+<li>
+<a href="/logout">Logout</a>
+</li>
+<li>
+<a href="/newpost">Create a New Post</a>
+</li>
 
 
-</body>
+  </body>
 
 </html>

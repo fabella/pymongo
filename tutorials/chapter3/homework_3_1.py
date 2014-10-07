@@ -9,19 +9,23 @@ def drop_lowest_homework_grade():
     students = db.students
 
     try:
-        query = {}
+        # get all the students, only bring the scores
+        studs = students.find({}, {'scores': True})
 
-        # get all the students
-        stds = students.find(query)
-
-        for student in stds:
+        for student in studs:
             # get only the homework types
-            min_score = sorted([s for s in student['scores'] if s['type'] == "homework"], key=lambda s: s['score'])[0]
-            # remove the min score from the student
-            student['scores'].remove(min_score)
-            print "Removed Lowest homework grade from", student['name'], "of", min_score['score']
-            # update the student in the database
-            students.save(student)
+            homework_scores_sorted_ascending = sorted([s for s in student['scores'] if s['type'] == "homework"],
+                                                      key=lambda grade: grade['score'])
+            # only delete the lowest when we have multiple homework
+            if len(homework_scores_sorted_ascending) > 1:
+                min_score = homework_scores_sorted_ascending[0]
+                # remove the min score from the student if there are mo
+                student['scores'].remove(min_score)
+                # update the scores list in the database
+                students.update({'_id': student['_id']}, {'$set': {'scores': student['scores']}})
+                # students.save(student)
+            else:
+                print "Student {id} has only one homework grade".format(id=student['_id'])
 
     except:
         print "Unexpected error:", sys.exc_info()[0]

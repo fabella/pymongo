@@ -1,7 +1,7 @@
 <!doctype HTML>
 <html>
 <head>
-    <title>Internal Error</title>
+<title>Internal Error</title>
 </head>
 <body>
 

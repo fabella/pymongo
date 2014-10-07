@@ -1,3 +1,5 @@
+
+
 #
 # Copyright (c) 2008 - 2013 10gen, Inc. <http://10gen.com>
 #
@@ -5,7 +7,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-# http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,24 +16,23 @@
 # limitations under the License.
 #
 #
-
+import hmac
 import random
 import string
 import hashlib
-
 import pymongo
 
 
 # The User Data Access Object handles all interactions with the User collection.
 class UserDAO:
+
     def __init__(self, db):
         self.db = db
         self.users = self.db.users
         self.SECRET = 'verysecret'
 
     # makes a little salt
-    @staticmethod
-    def make_salt():
+    def make_salt(self):
         salt = ""
         for i in range(5):
             salt = salt + random.choice(string.ascii_letters)
@@ -42,16 +43,15 @@ class UserDAO:
     # HASH(pw + salt),salt
     # use sha256
 
-    def make_pw_hash(self, pw, salt=None):
-        if salt is None:
+    def make_pw_hash(self, pw,salt=None):
+        if salt == None:
             salt = self.make_salt();
-        return hashlib.sha256(pw + salt).hexdigest() + "," + salt
+        return hashlib.sha256(pw + salt).hexdigest()+","+ salt
 
     # Validates a user login. Returns user record or None
     def validate_login(self, username, password):
 
         user = None
-        # noinspection PyBroadException
         try:
             user = self.users.find_one({'_id': username})
         except:
@@ -69,6 +69,7 @@ class UserDAO:
 
         # Looks good
         return user
+
 
     # creates a new user in the users collection
     def add_user(self, username, password, email):
